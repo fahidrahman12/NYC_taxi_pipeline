@@ -1,0 +1,28 @@
+version: 2
+
+seeds:
+  - name: payment_types
+    description: "Lookup table mapping payment_type codes to human-readable descriptions."
+    columns:
+      - name: payment_type_id
+        description: "Integer code used in the raw trip tables."
+        tests:
+          - not_null
+          - unique
+      - name: payment_type_description
+        description: "Human-readable payment method name."
+        tests:
+          - not_null
+
+  - name: rate_codes
+    description: "Lookup table mapping RatecodeID values to descriptions."
+    columns:
+      - name: rate_code_id
+        description: "Integer code used in the raw trip tables."
+        tests:
+          - not_null
+          - unique
+      - name: rate_code_description
+        description: "Human-readable rate code name."
+        tests:
+          - not_null
