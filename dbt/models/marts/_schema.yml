@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: fact_trips
+    description: >
+      Central fact table containing one row per taxi trip (yellow + green combined).
+      Partitioned by pickup_date for efficient date-range scans.
+      Clustered on taxi_type, payment_type_id, and pickup_location_id.
+    columns:
+      - name: trip_id
+        description: "Surrogate key — SHA-256 hash of taxi_type + timestamps + locations + total_amount."
+        tests:
+          - not_null
+          - unique
+      - name: taxi_type
+        description: "yellow or green."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["yellow", "green"]
+      - name: pickup_datetime
+        description: "Timestamp when the meter was engaged."
+        tests:
+          - not_null
+      - name: dropoff_datetime
+        description: "Timestamp when the meter was disengaged."
+        tests:
+          - not_null
+      - name: pickup_location_id
+        description: "FK → dim_zones.location_id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+      - name: dropoff_location_id
+        description: "FK → dim_zones.location_id"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+      - name: payment_type_id
+        description: "FK → dim_payment_types.payment_type_id"
+        tests:
+          - not_null
+      - name: trip_distance_miles
+        description: "Elapsed trip distance in miles."
+        tests:
+          - not_null
+      - name: fare_amount
+        description: "Meter fare in USD."
+        tests:
+          - not_null
+      - name: total_amount
+        description: "Total charged to passenger in USD."
+        tests:
+          - not_null
+      - name: trip_duration_minutes
+        description: "Derived field: dropoff minus pickup in minutes."
+        tests:
+          - not_null
+
+  - name: dim_zones
+    description: "TLC Taxi Zone dimension — one row per zone with borough and service_zone."
+    columns:
+      - name: zone_id
+        description: "Surrogate key."
+        tests:
+          - not_null
+          - unique
+      - name: location_id
+        description: "Natural key — TLC LocationID used as FK in fact_trips."
+        tests:
+          - not_null
+          - unique
+      - name: borough
+        description: "NYC borough."
+        tests:
+          - not_null
+      - name: zone_name
+        description: "Zone name."
+        tests:
+          - not_null
+
+  - name: dim_payment_types
+    description: "Payment type dimension sourced from seed data."
+    columns:
+      - name: payment_type_key
+        description: "Surrogate key."
+        tests:
+          - not_null
+          - unique
+      - name: payment_type_id
+        description: "Natural key — integer code used in fact_trips."
+        tests:
+          - not_null
+          - unique
+      - name: payment_type_description
+        description: "Human-readable payment method name."
+        tests:
+          - not_null
