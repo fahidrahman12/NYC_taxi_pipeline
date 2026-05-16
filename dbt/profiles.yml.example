@@ -1,0 +1,27 @@
+# Copy this file to ~/.dbt/profiles.yml or dbt/profiles.yml
+# Fill in your GCP values. Never commit the real profiles.yml.
+
+nyc_taxi:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: nyc_taxi_raw        # default dataset; staging/marts override via schema
+      location: "{{ env_var('GCP_REGION', 'US') }}"
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      threads: 4
+      timeout_seconds: 300
+      priority: interactive
+
+    prod:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: nyc_taxi_raw
+      location: "{{ env_var('GCP_REGION', 'US') }}"
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      threads: 8
+      timeout_seconds: 600
+      priority: batch
