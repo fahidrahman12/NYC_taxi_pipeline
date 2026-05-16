@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Env / secrets
+.env
+*.json
+!dbt/seeds/*.json
+
+# Local data downloads
+data/
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/.user.yml
+dbt/profiles.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

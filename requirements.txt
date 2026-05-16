@@ -1,0 +1,11 @@
+google-cloud-storage==2.18.2
+google-cloud-bigquery==3.25.0
+google-cloud-bigquery-storage==2.27.0
+dbt-bigquery==1.8.2
+requests==2.32.3
+pyyaml==6.0.2
+python-dotenv==1.0.1
+tqdm==4.66.4
+pyarrow==17.0.0
+pandas==2.2.2
+click==8.1.7
