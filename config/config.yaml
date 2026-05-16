@@ -1,0 +1,33 @@
+pipeline:
+  # Taxi types to ingest: yellow, green
+  taxi_types:
+    - yellow
+    - green
+  # Years and months to ingest
+  years:
+    - 2024
+  months:
+    - 1
+    - 2
+    - 3
+
+data_sources:
+  base_url: "https://d37ci6vzurychx.cloudfront.net/trip-data"
+  zone_lookup_url: "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+
+gcs:
+  # Raw Parquet files are stored immutably under this prefix
+  raw_prefix: "raw"
+
+bigquery:
+  # Partition tables by pickup date for query efficiency
+  partition_field: pickup_datetime
+  partition_type: DAY
+  # Cluster keys reduce scan cost on common filter columns
+  cluster_fields:
+    - vendor_id
+    - payment_type
+
+local:
+  # Temporary directory for downloaded files before GCS upload
+  tmp_dir: "data/tmp"
