@@ -1,0 +1,105 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw BigQuery tables loaded from GCS Parquet files. These tables are immutable — never modify them directly."
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: nyc_taxi_raw
+    tables:
+      - name: yellow_taxi_trips
+        description: "Raw yellow taxi trip records loaded directly from TLC Parquet files."
+        columns:
+          - name: VendorID
+            description: "TPEP provider that provided the record."
+          - name: tpep_pickup_datetime
+            description: "Date and time when the meter was engaged."
+          - name: tpep_dropoff_datetime
+            description: "Date and time when the meter was disengaged."
+          - name: passenger_count
+            description: "Number of passengers in the vehicle."
+          - name: trip_distance
+            description: "Elapsed trip distance in miles."
+          - name: RatecodeID
+            description: "Final rate code in effect at the end of the trip."
+          - name: store_and_fwd_flag
+            description: "Whether the trip record was held in vehicle memory before sending."
+          - name: PULocationID
+            description: "TLC Taxi Zone where the meter was engaged."
+          - name: DOLocationID
+            description: "TLC Taxi Zone where the meter was disengaged."
+          - name: payment_type
+            description: "Numeric code indicating how the passenger paid."
+          - name: fare_amount
+            description: "Meter fare calculated by the meter."
+          - name: extra
+            description: "Miscellaneous extras and surcharges."
+          - name: mta_tax
+            description: "MTA tax automatically triggered based on metered rate."
+          - name: tip_amount
+            description: "Tip amount — automatically populated for credit card tips."
+          - name: tolls_amount
+            description: "Total amount of all tolls paid during the trip."
+          - name: improvement_surcharge
+            description: "Improvement surcharge assessed on hailed trips."
+          - name: total_amount
+            description: "Total amount charged to passengers (excludes cash tips)."
+          - name: congestion_surcharge
+            description: "Congestion surcharge for trips in Manhattan south of 96th Street."
+          - name: airport_fee
+            description: "Pick-up or drop-off fee at JFK or LaGuardia."
+
+      - name: green_taxi_trips
+        description: "Raw green taxi trip records loaded directly from TLC Parquet files."
+        columns:
+          - name: VendorID
+            description: "LPEP provider that provided the record."
+          - name: lpep_pickup_datetime
+            description: "Date and time when the meter was engaged."
+          - name: lpep_dropoff_datetime
+            description: "Date and time when the meter was disengaged."
+          - name: passenger_count
+            description: "Number of passengers in the vehicle."
+          - name: trip_distance
+            description: "Elapsed trip distance in miles."
+          - name: RatecodeID
+            description: "Final rate code in effect at the end of the trip."
+          - name: store_and_fwd_flag
+            description: "Whether the trip record was held in vehicle memory before sending."
+          - name: PULocationID
+            description: "TLC Taxi Zone where the meter was engaged."
+          - name: DOLocationID
+            description: "TLC Taxi Zone where the meter was disengaged."
+          - name: payment_type
+            description: "Numeric code indicating how the passenger paid."
+          - name: fare_amount
+            description: "Meter fare."
+          - name: extra
+            description: "Miscellaneous extras and surcharges."
+          - name: mta_tax
+            description: "MTA tax."
+          - name: tip_amount
+            description: "Tip amount."
+          - name: tolls_amount
+            description: "Total tolls paid."
+          - name: improvement_surcharge
+            description: "Improvement surcharge."
+          - name: total_amount
+            description: "Total amount charged."
+          - name: payment_type
+            description: "Numeric payment code."
+          - name: trip_type
+            description: "1=Street-hail, 2=Dispatch."
+          - name: congestion_surcharge
+            description: "Congestion surcharge."
+
+      - name: taxi_zones
+        description: "TLC Taxi Zone lookup — maps LocationID to Borough and Zone name."
+        columns:
+          - name: LocationID
+            description: "Unique zone identifier used as FK in trip tables."
+          - name: Borough
+            description: "NYC borough."
+          - name: Zone
+            description: "Zone name within the borough."
+          - name: service_zone
+            description: "Service zone category (Yellow Zone, Boro Zone, EWR)."
